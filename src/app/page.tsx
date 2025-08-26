@@ -1,95 +1,172 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+import { useEffect, useState } from "react";
+import ProductForm from "../components/ProductForm";
+import ProductTable from "../components/ProductTable";
+import SalesForm from "@/components/SalesForm";
+import SalesHistory from "@/components/SalesHistory";
+import { Product } from "../data/types"; 
+import { fetchProducts, saveProduct, updateProductStock, updateProduct, deleteProduct } from "../data/supabaseProducts";
+import { saveSale, fetchSales } from "../data/supabaseSales";
 
-export default function Home() {
+
+export type Sale = {
+  id: string;
+  productId: string;
+  productName: string;
+  size: string;
+  stock: number;
+  date: string;
+  price: number;
+};
+
+export default function HomePage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [sales, setSales] = useState<Sale[]>([]);
+  const [showForm, setShowForm] = useState(false);
+  const [showSalesForm, setShowSalesForm] = useState(false); 
+  const [showSalesHistory, setShowSalesHistory] = useState(false);
+
+  useEffect(() => {
+    fetchProducts().then(setProducts).catch(console.error);
+  }, []);
+
+  const handleSaveProduct = async (product: Product) => {
+    try {
+      if (editingProduct) {
+        await updateProduct(product);
+        setProducts((prev) =>
+          prev.map((p) => (p.id === product.id ? product : p))
+        );
+        setEditingProduct(null);
+      } else {
+        await saveProduct(product);
+        setProducts((prev) => [...prev, product]);
+      }
+      setShowForm(false);
+    } catch (error) {
+      alert("Error guardando producto en la base de datos");
+      console.error(error);
+    }
+  };
+
+  const handleEdit = (product: Product) => {
+    setEditingProduct(product);
+    setShowForm(true);
+  };
+
+  const handleToggleActive = (id: string) => {
+    setProducts((prev) =>
+      prev.map((p) =>
+        p.id === id ? { ...p, active: !p.active } : p
+      )
+    );
+  };
+
+  const handleSale = async (sale: Omit<Sale, "id" | "date" | "productName">) => {
+  const product = products.find((p) => p.id === sale.productId);
+  if (!product) return;
+
+  const updatedSizes = product.sizes.map((s) =>
+    s.size === sale.size ? { ...s, stock: s.stock - sale.stock } : s
+  );
+
+  const newSale: Sale = {
+    ...sale,
+    id: Date.now().toString(),
+    date: new Date().toISOString(),
+    productName: product.name,
+  };
+
+  try {
+    await saveSale(newSale);
+
+    await updateProductStock(product.id, updatedSizes);
+
+    setProducts((prev) =>
+      prev.map((p) =>
+        p.id === product.id ? { ...p, sizes: updatedSizes } : p
+      )
+    );
+    setSales((prevSales) => [...prevSales, newSale]);
+    setShowSalesForm(false);
+  } catch (error) {
+    alert("Error guardando venta o actualizando stock en la base de datos");
+    console.error(error);
+  }
+  };
+
+  const handleShowSalesHistory = async () => {
+    try {
+      const ventas = await fetchSales();
+      setSales(ventas);
+      setShowSalesHistory(true);
+    } catch (error) {
+      alert("Error cargando historial de ventas");
+      console.error(error);
+    }
+  };
+
+  const handleDeleteProduct = async (id: string) => {
+    try {
+      await deleteProduct(id);
+      setProducts((prev) => prev.filter((p) => p.id !== id));
+    } catch (error) {
+      alert("Error eliminando producto");
+      console.error(error);
+    }
+  };
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
+    <div className="container py-4">
+      <h1 className="text-2xl font-bold mb-4">📦 Inventario</h1>
+      <button
+        className="mb-4 bg-blue-600 text-white px-4 py-2 rounded"
+        onClick={() => {
+          setEditingProduct(null);
+          setShowForm(true);
+        }}
+      >
+        ➕ Agregar nuevo producto
+      </button>
+      <button
+        className="mb-4 bg-green-600 text-white px-4 py-2 rounded ml-2"
+        onClick={() => setShowSalesForm(true)}
+      >
+        🛒 Registrar venta
+      </button>
+      <button
+        className="mb-4 bg-green-600 text-white px-4 py-2 rounded ml-2"
+        onClick={handleShowSalesHistory}
+      >
+        🛒 Historial de ventas
+      </button>
+      {showForm && (
+        <ProductForm
+          onSave={handleSaveProduct}
+          editingProduct={editingProduct}
+          onCancel={() => setShowForm(false)}
         />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      )}
+      {showSalesForm && (
+        <SalesForm
+          products={products}
+          onSale={handleSale}
+          onCancel={() => setShowSalesForm(false)}
+        />
+      )}      
+      {showSalesHistory && (
+        <SalesHistory
+          sales={sales}
+          onCancel={() => setShowSalesHistory(false)}
+        />
+      )}
+      <ProductTable
+        products={products}
+        onEdit={handleEdit}
+        onToggleActive={handleToggleActive}
+        onDelete={handleDeleteProduct}
+      />
     </div>
   );
 }
