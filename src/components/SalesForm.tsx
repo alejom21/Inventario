@@ -48,10 +48,11 @@ export default function SalesForm({ products, onSale, onCancel }: Props) {
   const total = stock * price;
 
   return (
-    <form onSubmit={handleSubmit} className="mb-6 p-4 border rounded">
-      <h2 className="font-bold mb-2">Registrar Venta</h2>
-      <div className="mb-2">
-        <label className="block mb-1">Producto</label>
+    <form onSubmit={handleSubmit} className="border rounded-lg p-4 shadow-sm bg-white max-w-xl mx-auto">
+      <h2 className="text-xl font-semibold mb-4 text-gray-700">🛒 Registrar Venta</h2>
+
+      <div className="mb-4">
+        <label className="block text-sm p-2 font-medium text-gray-600 mb-1">Producto</label>
         <select
           value={productId}
           onChange={(e) => {
@@ -59,7 +60,7 @@ export default function SalesForm({ products, onSale, onCancel }: Props) {
             setSize("");
             setPriceType("retail");
           }}
-          className="border p-1"
+          className="border border-gray-300 p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
           <option value="">Selecciona producto</option>
           {products
@@ -71,14 +72,15 @@ export default function SalesForm({ products, onSale, onCancel }: Props) {
             ))}
         </select>
       </div>
+
       {selectedProduct && (
         <>
-          <div className="mb-2">
-            <label className="block mb-1">Talla</label>
+          <div className="mb-4">
+            <label className="block text-sm p-2 font-medium text-gray-600 mb-1">Talla</label>
             <select
               value={size}
               onChange={(e) => setSize(e.target.value)}
-              className="border p-1"
+              className="border border-gray-300 p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
               <option value="">Selecciona talla</option>
               {selectedProduct.sizes.map((s) =>
@@ -90,63 +92,67 @@ export default function SalesForm({ products, onSale, onCancel }: Props) {
               )}
             </select>
           </div>
-          <div className="mb-2">
-            <label className="block mb-1">Tipo de precio</label>
+
+          <div className="mb-4">
+            <label className="block text-sm p-2 font-medium text-gray-600 mb-1">Tipo de precio</label>
             <select
               value={priceType}
-              onChange={(e) =>
-                setPriceType(e.target.value as "retail" | "wholesale")
-              }
-              className="border p-1"
+              onChange={(e) => setPriceType(e.target.value as "retail" | "wholesale")}
+              className="border border-gray-300 p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
               <option value="retail">Detalle (${selectedProduct.priceRetail})</option>
               <option value="wholesale">Mayorista (${selectedProduct.priceWholesale})</option>
             </select>
           </div>
-          <div className="mb-2">
-            <label className="block mb-1">Cantidad</label>
+
+          <div className="mb-4">
+            <label className="block text-sm p-2 font-medium text-gray-600 mb-1">Cantidad</label>
             <input
               type="number"
               min={1}
-              max={
-                selectedProduct.sizes.find((s) => s.size === size)?.stock || 1
-              }
+              max={selectedProduct.sizes.find((s) => s.size === size)?.stock || 1}
               value={stock}
               onChange={(e) => setStock(Number(e.target.value))}
-              className="border p-1 w-20"
+              className="border border-gray-300 p-2 rounded w-28 focus:outline-none focus:ring-2 focus:ring-blue-400"
               placeholder="Cantidad"
             />
           </div>
-          <div className="mb-2">
-            <label className="block mb-1">Precio unitario</label>
+
+          <div className="mb-4">
+            <label className="block text-sm p-2 font-medium text-gray-600 mb-1">Precio unitario</label>
             <input
               type="number"
               min={0}
               value={price}
               onChange={(e) => setPrice(Number(e.target.value))}
-              className="border p-1 w-24"
+              className="border border-gray-300 p-2 rounded w-32 focus:outline-none focus:ring-2 focus:ring-blue-400"
               placeholder="Precio venta"
             />
           </div>
-          <div className="mb-2 font-bold">
+
+          <div className="mb-4 font-semibold text-gray-700">
             Total: ${isNaN(total) ? 0 : total}
           </div>
         </>
       )}
-      <button
-        type="submit"
-        className="bg-blue-600 text-black px-4 py-1 rounded"
-        disabled={!productId || !size || stock <= 0}
-      >
-        Vender
-      </button>
-      <button
+
+      <div className="flex gap-4 mt-4">
+        <button
+          type="submit"
+          className="bg-blue-600 hover:bg-blue-700 text-black px-4 py-2 rounded transition disabled:opacity-50"
+          disabled={!productId || !size || stock <= 0}
+        >
+          Vender
+        </button>
+        <button
           type="button"
-          className="bg-gray-400 text-black px-4 py-1 rounded"
+          className="bg-gray-400 hover:bg-gray-500 text-black px-4 py-2 rounded transition"
           onClick={onCancel}
         >
           Cancelar
         </button>
+      </div>
     </form>
   );
+
 }

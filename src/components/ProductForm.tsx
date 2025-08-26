@@ -74,115 +74,124 @@ export default function ProductForm({ onSave, editingProduct, onCancel }: Props)
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mb-6 border p-4 rounded">
-      <h2 className="text-lg font-semibold mb-3">
+    <form 
+      onSubmit={handleSubmit} 
+      className="mb-6 border border-gray-200 p-6 rounded-lg shadow-sm bg-white max-w-3xl mx-auto"
+    >
+      <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-gray-700">
         {editingProduct ? "✏️ Editar Producto" : "➕ Agregar Producto"}
       </h2>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block font-medium mb-1">Referencia</label>
+          <label className="block font-medium mb-1 p-2 text-gray-600">Referencia</label>
           <input
             name="ref"
             placeholder="Referencia"
             value={formData.ref}
             onChange={handleChange}
-            className="border p-2 rounded w-full"
+            className="border border-gray-300 p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
             required
           />
         </div>
         <div>
-          <label className="block font-medium mb-1">Nombre</label>
+          <label className="block font-medium mb-1 p-2 text-gray-600">Nombre</label>
           <input
             name="name"
             placeholder="Nombre"
             value={formData.name}
             onChange={handleChange}
-            className="border p-2 rounded w-full"
+            className="border border-gray-300 p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
             required
           />
         </div>
         <div>
-          <label className="block font-medium mb-1">Costo</label>
+          <label className="block font-medium mb-1 p-2 text-gray-600">Costo</label>
           <input
             type="number"
             name="cost"
             placeholder="Costo"
             value={formData.cost}
             onChange={handleChange}
-            className="border p-2 rounded w-full"
+            className="border border-gray-300 p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
             required
           />
         </div>
         <div>
-          <label className="block font-medium mb-1">Precio Detal</label>
+          <label className="block font-medium mb-1 p-2 text-gray-600">Precio Detal</label>
           <input
             type="number"
             name="priceRetail"
             placeholder="Precio Detal"
             value={formData.priceRetail}
             onChange={handleChange}
-            className="border p-2 rounded w-full"
+            className="border border-gray-300 p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
             required
           />
         </div>
         <div>
-          <label className="block font-medium mb-1">Precio Mayor</label>
+          <label className="block font-medium mb-1 p-2 text-gray-600">Precio Mayor</label>
           <input
             type="number"
             name="priceWholesale"
             placeholder="Precio Mayor"
             value={formData.priceWholesale}
             onChange={handleChange}
-            className="border p-2 rounded w-full"
+            className="border border-gray-300 p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
             required
           />
         </div>
       </div>
 
-      <div className="mt-4">
-        <h3 className="font-semibold mb-2">Tallas</h3>
+      <div className="mt-6">
+        <h3 className="font-semibold mb-3 p-2 text-gray-700">Tallas</h3>
         {sizes.map((s, i) => (
-          <div key={i} className="flex gap-2 mb-2">
-            <div>
-              <label className="block text-xs mb-1">Talla</label>
+          <div key={i} className="flex flex-col sm:flex-row gap-3 mb-3">
+            <div className="flex-1">
+              <label className="block text-xs mb-1 p-2 text-gray-600">Talla</label>
               <input
                 placeholder="Talla"
                 value={s.size}
                 onChange={(e) => handleSizeChange(i, "size", e.target.value)}
-                className="border p-2 rounded"
+                className="border border-gray-300 p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>
-            <div>
-              <label className="block text-xs mb-1">Stock</label>
+            <div className="flex-1">
+              <label className="block text-xs mb-1 p-2 text-gray-600">Stock</label>
               <input
                 type="number"
                 placeholder="Stock"
                 value={s.stock}
                 onChange={(e) => handleSizeChange(i, "stock", e.target.value)}
-                className="border p-2 rounded"
+                className="border border-gray-300 p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>
           </div>
         ))}
-        <button type="button" onClick={addSize} className="text-sm text-blue-600">
+        <button
+          type="button"
+          onClick={addSize}
+          className="text-sm p-2 text-blue-600 hover:underline"
+        >
           ➕ Agregar talla
         </button>
       </div>
 
-      <button
-        type="submit"
-        className="mt-4 bg-green-600 text-black px-4 py-2 rounded"
-      >
-        {editingProduct ? "Guardar Cambios" : "Agregar Producto"}
-      </button>
-      <button
+      <div className="mt-6 flex flex-col p-2 sm:flex-row gap-3">
+        <button
+          type="submit"
+          className="flex-1 bg-green-600 hover:bg-green-700 text-black font-semibold px-4 py-2 m-2 rounded shadow transition"
+        >
+          {editingProduct ? "Guardar Cambios" : "Agregar Producto"}
+        </button>
+        <button
           type="button"
-          className="bg-gray-400 text-black px-4 py-2 rounded"
+          className="flex-1 bg-gray-400 hover:bg-gray-500 text-black font-semibold px-4 py-2 rounded shadow transition"
           onClick={onCancel}
         >
-          Cerrar Formularo
+          Cerrar Formulario
         </button>
+      </div>
     </form>
   );
 }

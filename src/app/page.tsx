@@ -8,7 +8,6 @@ import { Product } from "../data/types";
 import { fetchProducts, saveProduct, updateProductStock, updateProduct, deleteProduct } from "../data/supabaseProducts";
 import { saveSale, fetchSales } from "../data/supabaseSales";
 
-
 export type Sale = {
   id: string;
   productId: string;
@@ -64,36 +63,35 @@ export default function HomePage() {
   };
 
   const handleSale = async (sale: Omit<Sale, "id" | "date" | "productName">) => {
-  const product = products.find((p) => p.id === sale.productId);
-  if (!product) return;
+    const product = products.find((p) => p.id === sale.productId);
+    if (!product) return;
 
-  const updatedSizes = product.sizes.map((s) =>
-    s.size === sale.size ? { ...s, stock: s.stock - sale.stock } : s
-  );
-
-  const newSale: Sale = {
-    ...sale,
-    id: Date.now().toString(),
-    date: new Date().toISOString(),
-    productName: product.name,
-  };
-
-  try {
-    await saveSale(newSale);
-
-    await updateProductStock(product.id, updatedSizes);
-
-    setProducts((prev) =>
-      prev.map((p) =>
-        p.id === product.id ? { ...p, sizes: updatedSizes } : p
-      )
+    const updatedSizes = product.sizes.map((s) =>
+      s.size === sale.size ? { ...s, stock: s.stock - sale.stock } : s
     );
-    setSales((prevSales) => [...prevSales, newSale]);
-    setShowSalesForm(false);
-  } catch (error) {
-    alert("Error guardando venta o actualizando stock en la base de datos");
-    console.error(error);
-  }
+
+    const newSale: Sale = {
+      ...sale,
+      id: Date.now().toString(),
+      date: new Date().toISOString(),
+      productName: product.name,
+    };
+
+    try {
+      await saveSale(newSale);
+      await updateProductStock(product.id, updatedSizes);
+
+      setProducts((prev) =>
+        prev.map((p) =>
+          p.id === product.id ? { ...p, sizes: updatedSizes } : p
+        )
+      );
+      setSales((prevSales) => [...prevSales, newSale]);
+      setShowSalesForm(false);
+    } catch (error) {
+      alert("Error guardando venta o actualizando stock en la base de datos");
+      console.error(error);
+    }
   };
 
   const handleShowSalesHistory = async () => {
@@ -118,55 +116,68 @@ export default function HomePage() {
   };
 
   return (
-    <div className="container py-4">
-      <h1 className="text-2xl font-bold mb-4">📦 Inventario V1</h1>
-      <button
-        className="mb-4 bg-blue-600 text-black px-4 py-2 rounded"
-        onClick={() => {
-          setEditingProduct(null);
-          setShowForm(true);
-        }}
-      >
-        ➕ Agregar nuevo producto
-      </button>
-      <button
-        className="mb-4 bg-green-600 text-black px-4 py-2 rounded ml-2"
-        onClick={() => setShowSalesForm(true)}
-      >
-        🛒 Registrar venta
-      </button>
-      <button
-        className="mb-4 bg-green-600 text-black px-4 py-2 rounded ml-2"
-        onClick={handleShowSalesHistory}
-      >
-        🛒 Historial de ventas
-      </button>
-      {showForm && (
-        <ProductForm
-          onSave={handleSaveProduct}
-          editingProduct={editingProduct}
-          onCancel={() => setShowForm(false)}
-        />
-      )}
-      {showSalesForm && (
-        <SalesForm
-          products={products}
-          onSale={handleSale}
-          onCancel={() => setShowSalesForm(false)}
-        />
-      )}      
-      {showSalesHistory && (
-        <SalesHistory
-          sales={sales}
-          onCancel={() => setShowSalesHistory(false)}
-        />
-      )}
-      <ProductTable
-        products={products}
-        onEdit={handleEdit}
-        onToggleActive={handleToggleActive}
-        onDelete={handleDeleteProduct}
-      />
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <h1 className="text-3xl sm:text-4xl font-bold mb-6 pb-4 pt-4 text-gray-800 text-center sm:text-left">
+        📦 Inventario Bluestore
+      </h1>
+
+      <div className="flex flex-col sm:flex-row flex-wrap gap-3 mb-6 pb-4 justify-center sm:justify-start text-center">
+        <button
+          className="bg-blue-600 hover:bg-blue-700 text-black font-semibold px-4 py-2 rounded shadow transition"
+          onClick={() => {
+            setEditingProduct(null);
+            setShowForm(true);
+          }}
+        >
+          ➕ Agregar nuevo producto
+        </button>
+        <button
+          className="bg-green-600 hover:bg-green-700 text-black font-semibold px-4 py-2 rounded shadow transition"
+          onClick={() => setShowSalesForm(true)}
+        >
+          🛒 Registrar venta
+        </button>
+        <button
+          className="bg-gray-600 hover:bg-gray-700 text-black font-semibold px-4 py-2 rounded shadow transition"
+          onClick={handleShowSalesHistory}
+        >
+          📊 Historial de ventas
+        </button>
+      </div>
+
+      <div className="space-y-6 text-center">
+        {showForm && (
+          <ProductForm
+            onSave={handleSaveProduct}
+            editingProduct={editingProduct}
+            onCancel={() => setShowForm(false)}
+          />
+        )}
+
+        {showSalesForm && (
+          <SalesForm
+            products={products}
+            onSale={handleSale}
+            onCancel={() => setShowSalesForm(false)}
+          />
+        )}
+
+        {showSalesHistory && (
+          <SalesHistory
+            sales={sales}
+            onCancel={() => setShowSalesHistory(false)}
+          />
+        )}
+
+        <div className="overflow-x-auto">
+          <ProductTable
+            products={products}
+            onEdit={handleEdit}
+            onToggleActive={handleToggleActive}
+            onDelete={handleDeleteProduct}
+          />
+        </div>
+      </div>
     </div>
   );
 }
