@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Product } from "../data/types"; 
+import { Product, SizeStock } from "../data/types"; 
 
 type Props = {
   products: Product[];
@@ -59,7 +59,7 @@ export default function ProductTable({ products, onEdit, onToggleActive, onDelet
               <td className="border p-2">${p.priceWholesale}</td>
               <td className="border p-2">
                 {(() => {
-                  let sizesArr: any[] = [];
+                  let sizesArr: SizeStock[] = [];
                   if (Array.isArray(p.sizes)) {
                     sizesArr = p.sizes;
                   } else if (typeof p.sizes === "string") {
