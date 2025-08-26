@@ -50,7 +50,7 @@ export default function ProductTable({ products, onEdit, onToggleActive, onDelet
           {filteredProducts.map((p) => (
             <tr
               key={p.id}
-              className={p.active ? "bg-black" : "bg-red-100 text-gray-500"}
+              className={p.active ? "bg-white" : "bg-red-100 text-gray-500"}
             >
               <td className="border p-2">{p.ref}</td>
               <td className="border p-2">{p.name}</td>{/* 
