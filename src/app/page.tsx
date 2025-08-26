@@ -121,7 +121,7 @@ export default function HomePage() {
     <div className="container py-4">
       <h1 className="text-2xl font-bold mb-4">📦 Inventario V1</h1>
       <button
-        className="mb-4 bg-blue-600 text-white px-4 py-2 rounded"
+        className="mb-4 bg-blue-600 text-black px-4 py-2 rounded"
         onClick={() => {
           setEditingProduct(null);
           setShowForm(true);
@@ -130,13 +130,13 @@ export default function HomePage() {
         ➕ Agregar nuevo producto
       </button>
       <button
-        className="mb-4 bg-green-600 text-white px-4 py-2 rounded ml-2"
+        className="mb-4 bg-green-600 text-black px-4 py-2 rounded ml-2"
         onClick={() => setShowSalesForm(true)}
       >
         🛒 Registrar venta
       </button>
       <button
-        className="mb-4 bg-green-600 text-white px-4 py-2 rounded ml-2"
+        className="mb-4 bg-green-600 text-black px-4 py-2 rounded ml-2"
         onClick={handleShowSalesHistory}
       >
         🛒 Historial de ventas

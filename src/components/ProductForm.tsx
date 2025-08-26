@@ -172,13 +172,13 @@ export default function ProductForm({ onSave, editingProduct, onCancel }: Props)
 
       <button
         type="submit"
-        className="mt-4 bg-green-600 text-white px-4 py-2 rounded"
+        className="mt-4 bg-green-600 text-black px-4 py-2 rounded"
       >
         {editingProduct ? "Guardar Cambios" : "Agregar Producto"}
       </button>
       <button
           type="button"
-          className="bg-gray-400 text-white px-4 py-2 rounded"
+          className="bg-gray-400 text-black px-4 py-2 rounded"
           onClick={onCancel}
         >
           Cerrar Formularo

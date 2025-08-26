@@ -50,7 +50,7 @@ export default function ProductTable({ products, onEdit, onToggleActive, onDelet
           {filteredProducts.map((p) => (
             <tr
               key={p.id}
-              className={p.active ? "bg-white" : "bg-red-100 text-gray-500"}
+              className={p.active ? "bg-black" : "bg-red-100 text-gray-500"}
             >
               <td className="border p-2">{p.ref}</td>
               <td className="border p-2">{p.name}</td>{/* 
@@ -80,7 +80,7 @@ export default function ProductTable({ products, onEdit, onToggleActive, onDelet
               <td className="border p-2 flex gap-2">
                 <button
                   onClick={() => onEdit(p)}
-                  className="bg-blue-600 text-white px-2 py-1 rounded text-sm"
+                  className="bg-blue-600 text-black px-2 py-1 rounded text-sm"
                 >
                   ✏️ Editar
                 </button>
@@ -88,14 +88,14 @@ export default function ProductTable({ products, onEdit, onToggleActive, onDelet
                   onClick={() => {
                     if (window.confirm("¿Eliminar este producto?")) onDelete(p.id);
                   }}
-                  className="bg-blue-600 text-white px-2 py-1 rounded text-sm"
+                  className="bg-blue-600 text-black px-2 py-1 rounded text-sm"
                 >
                   Eliminar
                 </button>
                 <button
                   onClick={() => onToggleActive(p.id)}
                   className={`px-2 py-1 rounded text-sm ${
-                    p.active ? "bg-red-600 text-white" : "bg-green-600 text-white"
+                    p.active ? "bg-red-600 text-black" : "bg-green-600 text-black"
                   }`}
                 >
                   {p.active ? "Inhabilitar" : "Habilitar"}

@@ -135,14 +135,14 @@ export default function SalesForm({ products, onSale, onCancel }: Props) {
       )}
       <button
         type="submit"
-        className="bg-blue-600 text-white px-4 py-1 rounded"
+        className="bg-blue-600 text-black px-4 py-1 rounded"
         disabled={!productId || !size || stock <= 0}
       >
         Vender
       </button>
       <button
           type="button"
-          className="bg-gray-400 text-white px-4 py-1 rounded"
+          className="bg-gray-400 text-black px-4 py-1 rounded"
           onClick={onCancel}
         >
           Cancelar

@@ -39,7 +39,7 @@ export default function SalesHistory({ sales, onCancel }: Props) {
       )}
       <button
           type="button"
-          className="bg-gray-400 text-white px-4 py-1 rounded"
+          className="bg-gray-400 text-black px-4 py-1 rounded"
           onClick={onCancel}
         >
           Cerrar Historial
