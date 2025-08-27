@@ -70,6 +70,7 @@ export default function ProductTable({ products, onEdit, onToggleActive, onDelet
                     {sizesArr.map((s, i) => (
                       <span key={i} className="block">
                         <span className="font-semibold">{s.size}</span>: {s.stock}
+                        <br/>
                       </span>
                     ))}
                   </td>
