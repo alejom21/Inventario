@@ -69,7 +69,10 @@ export default function ProductTable({ products, onEdit, onToggleActive, onDelet
                   <td className="border p-2">
                     {sizesArr.map((s, i) => (
                       <span key={i} className="block">
-                        <span className="font-semibold">{s.size}</span>: {s.stock}
+                        <span className="font-semibold">{s.size}</span>
+                        {" - "}
+                        <span className="italic text-gray-600">{s.color}</span>
+                        {": "} {s.stock}
                         <br/>
                       </span>
                     ))}

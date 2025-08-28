@@ -1,4 +1,4 @@
-import { Product } from './types';
+/* import { Product } from './types';
 
 export const initialProducts: Product[] = [
   {
@@ -30,3 +30,4 @@ export const initialProducts: Product[] = [
     active: true,
   },
 ];
+ */

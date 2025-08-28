@@ -13,6 +13,7 @@ export type Sale = {
   productId: string;
   productName: string;
   size: string;
+  color: string;
   stock: number;
   date: string;
   price: number;

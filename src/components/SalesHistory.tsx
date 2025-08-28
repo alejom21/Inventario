@@ -20,6 +20,7 @@ export default function SalesHistory({ sales, onCancel }: Props) {
               <th className="border p-2 text-left">Fecha</th>
               <th className="border p-2 text-left">Producto</th>
               <th className="border p-2 text-left">Talla</th>
+              <th className="border p-2 text-left">Color</th>
               <th className="border p-2 text-left">Cantidad</th>
               <th className="border p-2 text-left">Total Venta</th>
             </tr>
@@ -30,6 +31,7 @@ export default function SalesHistory({ sales, onCancel }: Props) {
                 <td className="border p-2">{new Date(sale.date).toLocaleString()}</td>
                 <td className="border p-2">{sale.productName}</td>
                 <td className="border p-2">{sale.size}</td>
+                <td className="border p-2">{sale.color}</td>
                 <td className="border p-2">{sale.stock}</td>
                 <td className="border p-2">${sale.price * sale.stock}</td>
               </tr>
@@ -50,4 +52,6 @@ export default function SalesHistory({ sales, onCancel }: Props) {
     </div>
   </div>
   );
+
+
 }

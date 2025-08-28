@@ -53,7 +53,7 @@ export default function ProductForm({ onSave, editingProduct, onCancel }: Props)
   };
 
   const addSize = () => {
-    setSizes((prev) => [...prev, { size: "", stock: 0 }]);
+    setSizes((prev) => [...prev, { size: "", color: "", stock: 0 }]);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -143,7 +143,7 @@ export default function ProductForm({ onSave, editingProduct, onCancel }: Props)
         </div>
       </div>
 
-      <div className="mt-6">
+      <div className="mt-6"> 
         <h3 className="font-semibold mb-3 p-2 text-gray-700">Tallas</h3>
         {sizes.map((s, i) => (
           <div key={i} className="flex flex-col sm:flex-row gap-3 mb-3">
@@ -153,6 +153,15 @@ export default function ProductForm({ onSave, editingProduct, onCancel }: Props)
                 placeholder="Talla"
                 value={s.size}
                 onChange={(e) => handleSizeChange(i, "size", e.target.value)}
+                className="border border-gray-300 p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+            </div>
+            <div className="flex-1">
+              <label className="block text-xs mb-1 p-2 text-gray-600">Color</label>
+              <input
+                placeholder="Color"
+                value={s.color}
+                onChange={(e) => handleSizeChange(i, "color", e.target.value)}
                 className="border border-gray-300 p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>

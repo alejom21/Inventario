@@ -1,6 +1,7 @@
 
 export type SizeStock = {
   size: string;
+  color: string
   stock: number;
 };
 
@@ -20,6 +21,7 @@ export type SaleItem = {
   productId: number;
   productName: string; 
   talla: string;
+  color: string;
   stock: number;
   price: number;
 };
