@@ -15,11 +15,10 @@ export default function ProductTable({ products, onEdit, onToggleActive, onDelet
     (p) =>
       p.ref.toLowerCase().includes(search.toLowerCase()) ||
       p.name.toLowerCase().includes(search.toLowerCase())
-  );
-  console.log("Productos filtrados:", filteredProducts);
+  );/* 
   filteredProducts.forEach(p => {
     console.log("Producto:", p.name, "sizes:", p.sizes);
-  });
+  }); */
 
   return (
     <div className="border rounded-lg p-4 shadow-sm bg-white overflow-x-auto">
