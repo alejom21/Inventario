@@ -75,7 +75,8 @@ export default function SalesHistory({ sales, onCancel }: Props) {
       {sales.length === 0 ? (
         <p className="text-gray-500">No hay ventas registradas.</p>
       ) : (
-        <div className="flex justify-center">
+        <div className="flex justify-center"
+            style={{ justifyItems: "center" }}>
           <table className="w-full min-w-[900px] border-collapse">
             <thead>
               <tr className="bg-gray-100 text-gray-700">
