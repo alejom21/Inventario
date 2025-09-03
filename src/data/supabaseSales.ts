@@ -1,5 +1,5 @@
 import { supabase } from "../lib/supabaseClient";
-import { Sale } from "../app/page"; 
+import { Sale } from "../data/types"; 
 
 export async function saveSale(sale: Sale) {
   const { data, error } = await supabase.from("sales").insert([sale]);

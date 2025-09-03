@@ -18,7 +18,7 @@ export type Product = {
 };
 
 export type SaleItem = {
-  productId: number;
+  productId: string;
   productName: string; 
   talla: string;
   color: string;
@@ -26,10 +26,25 @@ export type SaleItem = {
   price: number;
 };
 
-export type Sale = {
+/* export type Sale = {
   id: number;
   date: string;
   type: "detal" | "mayor";
   items: SaleItem[];
   total: number;
+  paymentMethod: "efectivo" | "transferencia"; 
+  saleChannel: "fisico" | "virtual";   
+}; */
+
+export type Sale = {
+  id: number;
+  productId: string;
+  productName: string;
+  size: string;
+  color: string;
+  stock: number;
+  price: number;
+  date: string;
+  paymentMethod: "efectivo" | "transferencia";
+  saleChannel: "fisico" | "virtual";
 };

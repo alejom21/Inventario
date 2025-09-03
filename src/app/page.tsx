@@ -7,8 +7,9 @@ import SalesHistory from "@/components/SalesHistory";
 import { Product } from "../data/types"; 
 import { fetchProducts, saveProduct, updateProductStock, updateProduct, deleteProduct } from "../data/supabaseProducts";
 import { saveSale, fetchSales } from "../data/supabaseSales";
+import { Sale } from "../data/types";
 
-export type Sale = {
+/* export type Sale = {
   id: string;
   productId: string;
   productName: string;
@@ -17,7 +18,7 @@ export type Sale = {
   stock: number;
   date: string;
   price: number;
-};
+}; */
 
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -62,7 +63,7 @@ export default function HomePage() {
       )
     );
   };
-
+/* 
   const handleSale = async (sale: Omit<Sale, "id" | "date" | "productName">) => {
     const product = products.find((p) => p.id === sale.productId);
     if (!product) return;
@@ -93,7 +94,44 @@ export default function HomePage() {
       alert("Error guardando venta o actualizando stock en la base de datos");
       console.error(error);
     }
+  }; */
+
+  const handleSale = async (sale: Omit<Sale, "id" | "date">) => {
+  const product = products.find((p) => p.id === sale.productId);
+  if (!product) return;
+
+  // Actualizar stock
+  const updatedSizes = product.sizes.map((s) =>
+    s.size === sale.size && s.color === sale.color
+      ? { ...s, stock: s.stock - sale.stock }
+      : s
+  );
+
+  const newSale: Sale = {
+    ...sale,
+    id: Date.now(),
+    date: new Date().toISOString(),
   };
+
+  try {
+    await saveSale(newSale); // Función Supabase
+    await updateProductStock(product.id, updatedSizes);
+
+    setProducts((prev) =>
+      prev.map((p) =>
+        p.id === product.id ? { ...p, sizes: updatedSizes } : p
+      )
+    );
+
+    setSales((prev) => [...prev, newSale]);
+    setShowSalesForm(false);
+  } catch (error) {
+    console.error("Error guardando venta o actualizando stock:", error);
+    alert("Error guardando venta o actualizando stock");
+  }
+};
+
+
 
   const handleShowSalesHistory = async () => {
     try {
