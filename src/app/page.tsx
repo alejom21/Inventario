@@ -56,7 +56,7 @@ export default function HomePage() {
   const handleSale = async (
     saleItems: SaleItem[],
     paymentMethod: "efectivo" | "transferencia",
-    saleChannel: "fisico" | "virtual"
+    saleChannel: "Fisico" | "Virtual"
   ) => {
     try {
       const newSale: Sale = {

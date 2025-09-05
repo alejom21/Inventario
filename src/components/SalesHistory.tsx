@@ -9,7 +9,7 @@ type Props = {
 export default function SalesHistory({ sales, onCancel }: Props) {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [saleChannel, setSaleChannel] = useState<"" | "fisico" | "virtual">("");
+  const [saleChannel, setSaleChannel] = useState<"" | "Fisico" | "Virtual">("");
 
   // Filtrado por rango de fechas y canal de venta
   const filteredSales = sales.filter((sale) => {
@@ -58,12 +58,12 @@ export default function SalesHistory({ sales, onCancel }: Props) {
           <label className="block text-sm font-medium text-gray-600">Canal de venta</label>
           <select
             value={saleChannel}
-            onChange={(e) => setSaleChannel(e.target.value as "" | "fisico" | "virtual")}
+            onChange={(e) => setSaleChannel(e.target.value as "" | "Fisico" | "Virtual")}
             className="border border-gray-300 p-2 rounded"
           >
             <option value="">Todos</option>
-            <option value="fisico">Local físico</option>
-            <option value="virtual">Virtual</option>
+            <option value="Fisico">Local físico</option>
+            <option value="Virtual">Virtual</option>
           </select>
         </div>
         <button

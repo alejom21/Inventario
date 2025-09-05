@@ -5,8 +5,8 @@ type Props = {
   products: Product[];
   onSale: (
     saleItems: SaleItem[],
-    paymentMethod: "efectivo" | "transferencia",
-    saleChannel: "fisico" | "virtual"
+    paymentMethod: "Efectivo" | "Transferencia",
+    saleChannel: "Fisico" | "Virtual"
   ) => Promise<void> | void;
   onCancel: () => void;
 };
@@ -21,8 +21,8 @@ export default function SalesForm({ products, onSale, onCancel }: Props) {
   const [price, setPrice] = useState(0);
 
   const [saleItems, setSaleItems] = useState<SaleItem[]>([]);
-  const [paymentMethod, setPaymentMethod] = useState<"efectivo" | "transferencia">("efectivo");
-  const [saleChannel, setSaleChannel] = useState<"fisico" | "virtual">("fisico");
+  const [paymentMethod, setPaymentMethod] = useState<"Efectivo" | "Transferencia">("Efectivo");
+  const [saleChannel, setSaleChannel] = useState<"Fisico" | "Virtual">("Fisico");
 
   const selectedProduct = products.find((p) => p.id === productId);
 
@@ -238,11 +238,11 @@ export default function SalesForm({ products, onSale, onCancel }: Props) {
         <label className="block text-sm p-2 font-medium text-gray-600 mb-1">Forma de Pago</label>
         <select
           value={paymentMethod}
-          onChange={(e) => setPaymentMethod(e.target.value as "efectivo" | "transferencia")}
+          onChange={(e) => setPaymentMethod(e.target.value as "Efectivo" | "Transferencia")}
           className="border border-gray-300 p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
-          <option value="efectivo">Efectivo</option>
-          <option value="transferencia">Transferencia</option>
+          <option value="Efectivo">Efectivo</option>
+          <option value="Transferencia">Transferencia</option>
         </select>
       </div>
 
@@ -251,11 +251,11 @@ export default function SalesForm({ products, onSale, onCancel }: Props) {
         <label className="block text-sm p-2 font-medium text-gray-600 mb-1">Canal de Venta</label>
         <select
           value={saleChannel}
-          onChange={(e) => setSaleChannel(e.target.value as "fisico" | "virtual")}
+          onChange={(e) => setSaleChannel(e.target.value as "Fisico" | "Virtual")}
           className="border border-gray-300 p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
-          <option value="fisico">Local físico</option>
-          <option value="virtual">Virtual</option>
+          <option value="Fisico">Local físico</option>
+          <option value="Virtual">Virtual</option>
         </select>
       </div>
 
