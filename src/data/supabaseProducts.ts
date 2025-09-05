@@ -13,14 +13,19 @@ export async function saveProduct(product: Product) {
   return data;
 }
 
-export async function updateProductStock(productId: string, sizes: { size: string; stock: number }[]) {
+export async function updateProductStock(
+  productId: string,
+  sizes: { size: string; color: string; stock: number }[]
+) {
   const { data, error } = await supabase
     .from("products")
     .update({ sizes })
     .eq("id", productId);
+
   if (error) throw error;
   return data;
 }
+
 
 export async function updateProduct(product: Product) {
   const { data, error } = await supabase

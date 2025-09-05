@@ -7,7 +7,7 @@ import SalesHistory from "@/components/SalesHistory";
 import { Product } from "../data/types"; 
 import { fetchProducts, saveProduct, updateProductStock, updateProduct, deleteProduct } from "../data/supabaseProducts";
 import { saveSale, fetchSales } from "../data/supabaseSales";
-import { Sale } from "../data/types";
+import { Sale, SaleItem } from "../data/types";
 
 /* export type Sale = {
   id: string;
@@ -96,41 +96,57 @@ export default function HomePage() {
     }
   }; */
 
-  const handleSale = async (sale: Omit<Sale, "id" | "date">) => {
-  const product = products.find((p) => p.id === sale.productId);
-  if (!product) return;
+  const handleSale = async (
+    saleItems: SaleItem[],
+    paymentMethod: "efectivo" | "transferencia",
+    saleChannel: "fisico" | "virtual"
+  ) => {
+    try {
+      const newSale: Sale = {
+        id: Date.now(),
+        date: new Date().toISOString(),
+        items: saleItems,
+        paymentMethod,
+        saleChannel,
+      };
 
-  // Actualizar stock
-  const updatedSizes = product.sizes.map((s) =>
-    s.size === sale.size && s.color === sale.color
-      ? { ...s, stock: s.stock - sale.stock }
-      : s
-  );
+      // Guardar venta completa
+      await saveSale(newSale);
 
-  const newSale: Sale = {
-    ...sale,
-    id: Date.now(),
-    date: new Date().toISOString(),
+      // Actualizar stock de cada producto dentro de items
+      for (const item of saleItems) {
+        const product = products.find((p) => p.id === item.productId);
+        if (!product) continue;
+
+        const updatedSizes = product.sizes.map((s) =>
+          s.size === item.size && s.color === item.color
+            ? { ...s, stock: s.stock - item.stock }
+            : s
+        );
+
+        await updateProductStock(product.id, updatedSizes);
+
+        setProducts((prev) =>
+          prev.map((p) =>
+            p.id === product.id ? { ...p, sizes: updatedSizes } : p
+          )
+        );
+      }
+
+      // Actualizar estado local de ventas
+      setSales((prev) => [...prev, newSale]);
+      setShowSalesForm(false);
+    } catch (error: any) {
+      console.error("❌ Error guardando venta o actualizando stock:", error.message || error);
+      if (error.details) console.error("Detalles:", error.details);
+      if (error.hint) console.error("Hint:", error.hint);
+      alert("Error guardando venta o actualizando stock");
+    }
+    /* } catch (error) {
+      console.error("❌ Error guardando venta o actualizando stock:", error);
+      alert("Error guardando venta o actualizando stock");
+    } */
   };
-
-  try {
-    await saveSale(newSale); // Función Supabase
-    await updateProductStock(product.id, updatedSizes);
-
-    setProducts((prev) =>
-      prev.map((p) =>
-        p.id === product.id ? { ...p, sizes: updatedSizes } : p
-      )
-    );
-
-    setSales((prev) => [...prev, newSale]);
-    setShowSalesForm(false);
-  } catch (error) {
-    console.error("Error guardando venta o actualizando stock:", error);
-    alert("Error guardando venta o actualizando stock");
-  }
-};
-
 
 
   const handleShowSalesHistory = async () => {

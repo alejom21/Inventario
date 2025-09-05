@@ -17,14 +17,49 @@ export type Product = {
   
 };
 
-export type SaleItem = {
+/* export type SaleItem = {
   productId: string;
   productName: string; 
   talla: string;
   color: string;
   stock: number;
   price: number;
+}; */
+/* export type SaleItem = {
+  productId: string;
+  productName: string;
+  size: string;
+  color: string;
+  stock: number;
+  price: number;
 };
+
+export type Sale = {
+  id: string;
+  date: string;
+  items: SaleItem[];
+  paymentMethod: "efectivo" | "transferencia";
+  saleChannel: "fisico" | "virtual";
+}; */
+
+export interface SaleItem {
+  productId: string;
+  productName: string;
+  size: string;
+  color: string;
+  stock: number; // cantidad vendida
+  price: number; // precio unitario
+}
+
+export interface Sale {
+  id: number;
+  date: string;
+  items: SaleItem[]; // cada venta puede tener múltiples productos
+  paymentMethod: "efectivo" | "transferencia";
+  saleChannel: "fisico" | "virtual";
+}
+
+
 
 /* export type Sale = {
   id: number;
@@ -36,7 +71,7 @@ export type SaleItem = {
   saleChannel: "fisico" | "virtual";   
 }; */
 
-export type Sale = {
+/* export type Sale = {
   id: number;
   productId: string;
   productName: string;
@@ -47,4 +82,4 @@ export type Sale = {
   date: string;
   paymentMethod: "efectivo" | "transferencia";
   saleChannel: "fisico" | "virtual";
-};
+}; */
