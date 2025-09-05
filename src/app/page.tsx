@@ -9,17 +9,6 @@ import { fetchProducts, saveProduct, updateProductStock, updateProduct, deletePr
 import { saveSale, fetchSales } from "../data/supabaseSales";
 import { Sale, SaleItem } from "../data/types";
 
-/* export type Sale = {
-  id: string;
-  productId: string;
-  productName: string;
-  size: string;
-  color: string;
-  stock: number;
-  date: string;
-  price: number;
-}; */
-
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -63,38 +52,6 @@ export default function HomePage() {
       )
     );
   };
-/* 
-  const handleSale = async (sale: Omit<Sale, "id" | "date" | "productName">) => {
-    const product = products.find((p) => p.id === sale.productId);
-    if (!product) return;
-
-    const updatedSizes = product.sizes.map((s) =>
-      s.size === sale.size ? { ...s, stock: s.stock - sale.stock } : s
-    );
-
-    const newSale: Sale = {
-      ...sale,
-      id: Date.now().toString(),
-      date: new Date().toISOString(),
-      productName: product.name,
-    };
-
-    try {
-      await saveSale(newSale);
-      await updateProductStock(product.id, updatedSizes);
-
-      setProducts((prev) =>
-        prev.map((p) =>
-          p.id === product.id ? { ...p, sizes: updatedSizes } : p
-        )
-      );
-      setSales((prevSales) => [...prevSales, newSale]);
-      setShowSalesForm(false);
-    } catch (error) {
-      alert("Error guardando venta o actualizando stock en la base de datos");
-      console.error(error);
-    }
-  }; */
 
   const handleSale = async (
     saleItems: SaleItem[],
@@ -136,10 +93,12 @@ export default function HomePage() {
       // Actualizar estado local de ventas
       setSales((prev) => [...prev, newSale]);
       setShowSalesForm(false);
-    } catch (error: any) {
-      console.error("❌ Error guardando venta o actualizando stock:", error.message || error);
-      if (error.details) console.error("Detalles:", error.details);
-      if (error.hint) console.error("Hint:", error.hint);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("❌ Error guardando venta o actualizando stock:", error.message);
+      } else {
+        console.error("❌ Error guardando venta o actualizando stock:", error);
+      }
       alert("Error guardando venta o actualizando stock");
     }
     /* } catch (error) {

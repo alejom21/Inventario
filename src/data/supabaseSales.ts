@@ -30,7 +30,9 @@ export async function fetchSales(): Promise<Sale[]> {
     .from("sales")
     .select("*");
 
-  if (error) throw error;
+  if (error) {
+    throw new Error(error.message);
+  }
 
   return (data as any[]).map((s) => ({
     ...s,
