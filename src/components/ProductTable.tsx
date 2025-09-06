@@ -67,11 +67,24 @@ export default function ProductTable({ products, onEdit, onToggleActive, onDelet
                   <td className="border p-2">${p.priceWholesale}</td>
                   <td className="border p-2">
                     {sizesArr.map((s, i) => (
-                      <span key={i} className="block">
+                      <span
+                        key={i}
+                        style={{
+                          color: s.stock === 0 ? "red" : "inherit",
+                          fontWeight: s.stock === 0 ? "bold" as const : "normal" as const,
+                          textDecoration: s.stock === 0 ? "underline" : "none",
+                          borderBottom: "1px solid #e5e7eb", // gris clarito, como Tailwind border-gray-200
+                          paddingBottom: "2px",
+                          marginBottom: "2px"
+                        }}  
+                      >
                         <span className="font-semibold">{s.size}</span>
                         {" - "}
                         <span className="italic text-gray-600">{s.color}</span>
-                        {": "} {s.stock}
+                        {": "}
+                        <span>
+                          {s.stock}
+                        </span>
                         <br/>
                       </span>
                     ))}
