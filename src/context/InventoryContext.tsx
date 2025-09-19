@@ -37,26 +37,26 @@ type InventoryContextType = {
 const InventoryContext = createContext<InventoryContextType | undefined>(undefined);
 
 export const InventoryProvider = ({ children }: { children: React.ReactNode }) => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [sales, setSales] = useState<Sale[]>([]);
+    const [products, setProducts] = useState<Product[]>([]);
+    const [sales, setSales] = useState<Sale[]>([]);
 
-  const addProduct = (product: Product) => {
-    setProducts((prev) => [...prev, product]);
-  };
+    const addProduct = (product: Product) => {
+      setProducts((prev) => [...prev, product]);
+    };
 
-  const updateProduct = (updatedProduct: Product) => {
-    setProducts((prev) =>
-      prev.map((p) => (p.id === updatedProduct.id ? updatedProduct : p))
-    );
-  };
+    const updateProduct = (updatedProduct: Product) => {
+      setProducts((prev) =>
+        prev.map((p) => (p.id === updatedProduct.id ? updatedProduct : p))
+      );
+    };
 
-  const toggleProduct = (id: number) => {
-    setProducts((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, enabled: !p.enabled } : p))
-    );
-  };
+    const toggleProduct = (id: number) => {
+      setProducts((prev) =>
+        prev.map((p) => (p.id === id ? { ...p, enabled: !p.enabled } : p))
+      );
+    };
 
-  const addSale = (items: Omit<SaleItem, "productName">[], type: "detal" | "mayor") => {
+    const addSale = (items: Omit<SaleItem, "productName">[], type: "detal" | "mayor") => {
     const newSale: Sale = {
       id: Date.now(),
       date: new Date().toISOString(),
@@ -71,12 +71,17 @@ export const InventoryProvider = ({ children }: { children: React.ReactNode }) =
       total: items.reduce((acc, item) => acc + item.price * item.stock, 0),
     };
 
+    // Actualiza el stock de todos los productos y tallas vendidos
     const updatedProducts = products.map((p) => {
+      // Busca todos los items vendidos de este producto
       const itemsSold = newSale.items.filter((i) => i.productId === p.id);
       if (itemsSold.length > 0) {
         const updatedStock = { ...p.stock };
         itemsSold.forEach((i) => {
-          updatedStock[i.talla] = (updatedStock[i.talla] || 0) - i.stock;
+          // Solo descuenta si la talla existe y hay suficiente stock
+          if (updatedStock[i.talla] !== undefined) {
+            updatedStock[i.talla] = Math.max(0, updatedStock[i.talla] - i.stock);
+          }
         });
         return { ...p, stock: updatedStock };
       }
